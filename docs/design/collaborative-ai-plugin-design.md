@@ -1,4 +1,4 @@
-# Brock — Collaborative AI Pair Programming Plugin
+# Brock — Adaptive SDLC Plugin
 
 **Date**: 2026-06-12
 **Status**: Draft — brainstorming phase
@@ -17,16 +17,20 @@ Autonomous AI tools optimise for throughput, but the review at the end is actual
 
 ## Philosophy
 
-**The agent is a senior colleague who pair programs with you, not a contractor who delivers finished work.**
+**The engineer decides how they work, not the tool.**
 
-A senior colleague would:
-- Explain *why* before *what*
-- Point you at existing patterns: "look at how `CreatePage.tsx` does this, we'll follow the same approach"
-- Name the concepts: "this is a reconcile loop pattern, here's why it works this way"
-- Let you do some of the work: "try writing the validation function, I'll review it"
-- Not just give answers: "what do *you* think should happen when the request fails?"
+Some engineers want full autonomy — hand off an issue, get a PR back. Others want to be involved at every step, building context and understanding as they go. Most want something in between, and it changes depending on the task, the codebase, and what they already know.
 
-## Core Principle: Hold Your Ground
+Brock adapts to all of these. At the collaborative end of the spectrum, it behaves like a senior colleague who:
+- Explains *why* before *what*
+- Points you at existing patterns: "look at how `CreatePage.tsx` does this, we'll follow the same approach"
+- Names the concepts: "this is a reconcile loop pattern, here's why it works this way"
+- Lets you do some of the work: "try writing the validation function, I'll review it"
+- Doesn't just give answers: "what do *you* think should happen when the request fails?"
+
+At the autonomous end, it gets out of your way and delivers results.
+
+### Hold Your Ground
 
 **Questions are requests for more information, not disagreement.**
 
@@ -51,11 +55,27 @@ The distinction:
 
 This applies everywhere — not just review. During implementation, if the user questions an approach, the agent should explain why it chose it rather than immediately switching to whatever the user seems to be suggesting. Only an explicit correction ("do it this way instead") should change the approach.
 
-## Core Design: The Collaboration Spectrum
+### Always-Pause Checkpoints
+
+All code gets reviewed before a PR regardless of collaboration level — the spectrum only controls how involved the user is during that process. However, some situations should **always** cause the agent to pause and involve the user, even in fully autonomous mode:
+
+- Changing existing behaviour (not just adding new code)
+- Multiple valid architectural approaches
+- Something that contradicts what the user said they wanted
+- Deleting or significantly modifying existing code
+- Anything surprising or unexpected encountered during the work
+
+These are about risk, not context level. An engineer in autonomous mode has opted out of step-by-step involvement, not out of being informed about high-risk decisions.
+
+> **Note**: The always-pause behaviour itself is straightforward — the agent stops and asks. What hasn't been validated is whether a persistent summary dashboard (showing the state of paused items across parallel work) is feasible within the Claude Code plugin system. This may require creative workarounds or influence the plugin architecture.
+
+## Core Design
+
+### The Collaboration Spectrum
 
 Collaboration is **fluid, not binary**. Five levels on a spectrum, where the agent can shift between them mid-task based on user cues.
 
-### Levels
+#### Levels
 
 | Level | Name | Behaviour | When to use |
 |-------|------|-----------|-------------|
@@ -65,7 +85,7 @@ Collaboration is **fluid, not binary**. Five levels on a spectrum, where the age
 | 4 | **Pair** | Work through it together step by step, explain concepts, reference patterns | New to this area, want to understand before code is written |
 | 5 | **Teach** | Like pair but pedagogical — flip questions back, ask user to reason through things | Genuine learning moments, building deep understanding |
 
-### Default: Checkpoint
+#### Default: Checkpoint
 
 Out of the box, with no signal from the user, the agent operates in **checkpoint mode**. This means:
 - The agent breaks work into a task list upfront
@@ -73,7 +93,7 @@ Out of the box, with no signal from the user, the agent operates in **checkpoint
 - After completing each task, the agent checks in: shows what it did, explains why, and waits before moving on
 - The user can steer: "looks good", "do that differently", "skip that, I'll do it", or "I get it now, just do the rest"
 
-### How levels are set
+#### How levels are set
 
 **The user sets the starting point via natural language.** No flags, no config menus.
 
@@ -82,9 +102,7 @@ Out of the box, with no signal from the user, the agent operates in **checkpoint
 - "Ship #42, new to this repo" — start at pair
 - "Ship #42, can you teach me this pattern?" — start at teach
 
-**No git-based inference.** Git blame is unreliable — you might have deep context from reviewing PRs, pair programming, working in forks, or knowing the patterns from other repos. The agent should never presume to know your context level.
-
-### Mid-task shifting
+#### Mid-task shifting
 
 The level is fluid. Within a single task the user can shift:
 
@@ -94,30 +112,21 @@ The level is fluid. Within a single task the user can shift:
 
 The key moment: **"I get it now, just do the rest"** means the collaboration worked. The user built enough context that they trust what's coming next. The agent earned autonomy rather than assuming it.
 
-### Always-pause checkpoints
-
-Regardless of collaboration level, some things should **always** cause a pause:
-
-- Changing existing behaviour (not just adding new code)
-- Multiple valid architectural approaches
-- Something that contradicts what the user said they wanted
-- Deleting or significantly modifying code someone else owns
-- Anything surprising or risky
-
-These are about risk, not context level.
-
-## Task List as Collaboration Surface
+### Task List as Collaboration Surface
 
 The task list is the core collaboration mechanism. It's where the user sees the plan, tracks progress, and steers.
 
-### How it works
+#### How it works
 
-The agent breaks work into tasks at a **meaningful granularity**:
-- For a form: each input/field is roughly a task
-- For a controller: each function is roughly a task
-- For a refactor: each logical change is a task
+The agent breaks work into tasks at a **meaningful granularity** — each task should represent a logical unit of work that's worth checking in on. The right size depends on the work, for example:
+- A UI form: each field or validation rule
+- A backend controller or service: each function or endpoint
+- A refactor: each logical change
+- A bug fix: reproduce, identify cause, fix, verify
+- An API integration: auth setup, request handling, response mapping, error handling
+- A migration: schema change, data transformation, rollback plan
 
-### Example flow
+#### Example flow
 
 User: "Work on issue #42 — add validation to the create form"
 
@@ -136,7 +145,7 @@ After completing #1, the agent checks in, shows what it did, and waits. User can
 - "Skip #2, I'll do that one" — user takes ownership
 - "I get it now, just do the rest" — shift to autonomous for remaining tasks
 
-### Granularity by level
+#### Granularity by level
 
 - **Autonomous**: agent runs through the whole list, no pauses
 - **Narrate**: agent runs through but explains each step as it goes
@@ -146,19 +155,23 @@ After completing #1, the agent checks in, shows what it did, and waits. User can
 
 ## Review Workflow
 
-All code is AI-generated — review is always reviewing code the agent wrote. The collaboration level during implementation directly affects how much review is needed afterward.
+All code is AI-generated — review is always reviewing code the agent wrote. The collaboration level for review is independent of the implementation level. An engineer might narrate through implementation but want checkpoint-style review where they go finding by finding, or vice versa.
 
 ### Review effort scales with implementation involvement
 
+The implementation level provides a sensible default for review depth, but the user can always override:
+
 - **You were at checkpoint/pair/teach during implementation** — you already have context. Review can be lighter: "here's the final diff, you saw each piece as it was built, anything to change?"
-- **You were at autonomous/narrate during implementation** — you need more review. Checkpoint review with findings one at a time.
+- **You were at autonomous/narrate during implementation** — you likely need more review. Checkpoint review with findings one at a time.
 - **Someone else's agent wrote it, you have no context** — pair review, walk through the diff together.
+
+These are defaults, not rules. The user can ask for any review style regardless of how the implementation was done.
 
 ### Review across the spectrum
 
 | Level | Review behaviour |
 |-------|------------------|
-| **Autonomous** | Fan out reviewers, collect findings, present summary |
+| **Autonomous** | Agent self-reviews, fixes what it finds, presents a summary of what was caught and fixed so the user has context for their own review |
 | **Narrate** | Same process, but you can follow along as each reviewer works, with running summary |
 | **Checkpoint** | Present findings **one at a time**. Each finding is a checkpoint — engage, question, dismiss, or dig deeper before moving to the next |
 | **Pair** | Walk through the diff section by section. Not just findings — explain what the code does, why, point out patterns |
@@ -187,13 +200,7 @@ After working through all findings:
 
 ## Multi-Issue and Parallel Work
 
-At the autonomous/narrate end of the spectrum, users may want multiple issues in flight simultaneously.
-
-### Rules
-
-- **Checkpoint, pair, teach** — one issue at a time. You're actively involved, context switching would break the collaboration.
-- **Autonomous, narrate** — multiple issues can run in parallel in worktrees.
-- **Mixed** — some issues at checkpoint, others autonomous. Per-issue, not global.
+Engineers may want multiple issues in flight simultaneously at any collaboration level. Each issue has its own collaboration level — it's per-issue, not global. How the engineer manages their attention across parallel work is their choice, not something the plugin restricts.
 
 ### Example
 
@@ -266,3 +273,13 @@ docs/             architecture decisions
    - Works best during review ("spot the issue") and architectural decisions ("what pattern would you use here?")
 4. **How opinionated should agents be about tech stack?** — **Generic**. Brock works with any repo, any language. Domain knowledge comes from the repo's CLAUDE.md (patterns, conventions, architecture), not baked into the plugin. The agent reads the repo's docs and uses them to reference patterns, explain concepts, and teach. This means any team with a CLAUDE.md gets rich, context-aware collaboration without Brock needing domain-specific code.
 5. **Should there be a way to set defaults per-repo or per-team?** — **Yes**. Teams can set a default collaboration level in their CLAUDE.md (e.g. `brock-default: pair` for a complex repo where everyone should start collaborative). Individual users can always override per-task via natural language ("I know this area, just do it"). The repo default is a starting suggestion, not a lock.
+
+## Rejected Ideas
+
+Ideas that were considered during design and deliberately not pursued.
+
+### Git-based context inference
+
+Use git blame and commit history to automatically determine how familiar an engineer is with the code. For example, if they've never committed to these files, default to pair mode.
+
+**Why rejected**: Git data is an unreliable proxy for context. An engineer might have deep familiarity from reviewing PRs, pair programming on someone else's commits, working in forks that got squash-merged, or knowing the patterns from other repos that use the same stack. Automatically inferring context level would get it wrong often enough to be annoying, and being told "I see you haven't worked here before" when you actually know the code well erodes trust in the tool. The engineer knows their own context level — let them set it.
