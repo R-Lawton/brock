@@ -13,7 +13,7 @@ AI coding tools create a knowledge gap. Code gets written but the human doesn't 
 
 **Everyone is a junior somewhere — it's about context, not title.**
 
-Autonomous AI tools (like clawdio) optimise for throughput, but the review at the end is actually *harder* because you're reading code with zero context about the decisions behind it. You're doing the same cognitive work but compressed into the review phase instead of spread across the process.
+Autonomous AI tools optimise for throughput, but the review at the end is actually *harder* because you're reading code with zero context about the decisions behind it. You're doing the same cognitive work but compressed into the review phase instead of spread across the process.
 
 ## Philosophy
 
@@ -240,9 +240,9 @@ Full SDLC coverage:
 
 ## Architecture
 
-**Independent plugin** — not a fork of clawdio, not layered on top. The collaborative philosophy is fundamentally different from autonomous throughput optimisation and should be designed from first principles.
+**Independent plugin** designed from first principles around the collaborative philosophy.
 
-**Structure** (same as Claude Code plugin conventions):
+**Structure** (Claude Code plugin conventions):
 ```
 agents/           subagent definitions (one .md per agent)
 skills/           on-demand skills (SKILL.md per directory)
@@ -252,7 +252,7 @@ docs/             architecture decisions
 .claude-plugin/   plugin manifest
 ```
 
-**Key difference from clawdio**: agents are not separate per-mode. The same implement agent operates across the full spectrum. Collaboration level is a parameter, not a different agent.
+**Key design choice**: agents are not separate per-mode. The same implement agent operates across the full spectrum. Collaboration level is a parameter, not a different agent.
 
 ## Resolved Questions
 
