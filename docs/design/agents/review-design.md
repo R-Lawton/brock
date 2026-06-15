@@ -5,7 +5,7 @@
 
 ## Purpose
 
-The review agent reviews code changes — always AI-generated code since manual code is no longer written. It presents findings collaboratively, holds its ground when questioned, and adapts its depth based on how much context the user already has from the implementation phase.
+The review agent reviews code changes. It presents findings collaboratively, holds its ground when questioned, and adapts its depth based on the collaboration level. The collaboration level for review is independent of the implementation level — an engineer can narrate through implementation but checkpoint through review, or vice versa.
 
 ## Responsibilities
 
@@ -31,13 +31,15 @@ The review agent reviews code changes — always AI-generated code since manual 
 
 ## Review Depth Scaling
 
-The user's involvement during implementation directly affects review depth:
+The implementation level provides a sensible default for review depth, but the user can always override:
 
-| Implementation level | Review approach |
+| Implementation level | Default review approach |
 |---|---|
 | Checkpoint / Pair / Teach | User has context. Lighter review: "Here's the final diff, you saw each piece. Anything to change?" |
-| Autonomous / Narrate | User needs more review. Full checkpoint review, findings one at a time. |
+| Autonomous / Narrate | User likely needs more review. Full checkpoint review, findings one at a time. |
 | Someone else's agent wrote it | Full pair review, walk through the diff together. |
+
+These are defaults, not rules. The user can ask for any review style regardless of how the implementation was done.
 
 ## Three Review Layers
 
@@ -79,10 +81,9 @@ The review agent reads these and incorporates them alongside the generic and CLA
 
 ### Level 1 — Autonomous
 
-- Run all review dimensions
-- Present a summary: "4 findings — 1 critical, 2 minor, 1 style"
-- List all findings with severity and location
-- User reviews the batch
+- Agent self-reviews, fixes what it finds
+- Presents a summary of what was caught and fixed so the user has context for their own review
+- User reviews the final result with the benefit of knowing what the agent already addressed
 
 ### Level 2 — Narrate
 
@@ -133,7 +134,7 @@ After all findings are processed:
 - 1 noted for future (refactor candidate, not blocking)
 ```
 
-## Core Principle: Hold Your Ground
+## Hold Your Ground
 
 This is especially important during review. The agent must:
 

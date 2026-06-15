@@ -59,7 +59,6 @@ The router watches for cues and instructs the active agent to shift:
 
 ### What the router does NOT do
 
-- **No git inference** — never uses git blame, commit history, or file authorship to guess context level. Git data is unreliable.
 - **No code writing** — the router orchestrates, it does not implement.
 - **No opinion on implementation approach** — that's the implement agent's job.
 
@@ -73,10 +72,7 @@ When multiple issues are in flight, the router maintains a summary dashboard:
 #3 [narrate]     2/7  Working: Implementing webhook handler
 ```
 
-Rules:
-- **Checkpoint/pair/teach** — one active at a time, user is involved
-- **Autonomous/narrate** — can run in background alongside an active collaborative issue
-- **Always-pause moments** surface in the dashboard regardless of level
+Each issue has its own collaboration level. How the engineer manages their attention across parallel work is their choice, not something the plugin restricts. Always-pause moments surface in the dashboard regardless of level.
 
 ## Multi-issue dispatch
 

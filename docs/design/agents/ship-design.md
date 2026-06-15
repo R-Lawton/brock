@@ -63,8 +63,9 @@ The ship agent manages the full lifecycle from issue to merged PR. It coordinate
 ### Level 1 — Autonomous
 
 - Run the full lifecycle end to end
-- Report back with: PR link, summary of what was done, any decisions made, review findings
-- User reviews the finished PR
+- Agent self-reviews and fixes what it finds during review phase
+- Report back with: PR link, summary of what was done, key decisions, what the self-review caught and fixed
+- User reviews the finished PR with the benefit of the self-review summary
 
 ### Level 2 — Narrate
 
@@ -98,14 +99,14 @@ The ship agent manages the full lifecycle from issue to merged PR. It coordinate
 When the user requests multiple issues ("ship #1, #2, #3"):
 
 1. Router sets per-issue collaboration levels
-2. Ship agent dispatches implement agents — parallel for autonomous/narrate, sequential for checkpoint/pair/teach
+2. Ship agent dispatches implement agents per issue, each with its own collaboration level
 3. Maintains summary dashboard across all issues
 4. Each issue goes through the full lifecycle independently
 5. Reports a summary table when all complete
 
 ## PR Description
 
-The PR description is a key output — it captures the journey, not just the result. This is especially valuable because all code is AI-generated.
+The PR description is a key output — it captures the journey, not just the result.
 
 Includes:
 - **Summary**: what was done and why

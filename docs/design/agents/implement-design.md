@@ -30,12 +30,14 @@ The implement agent is the main workhorse. It takes a well-defined issue, breaks
 
 ## Task Breakdown
 
-The agent breaks work into tasks at a **meaningful granularity**:
+The agent breaks work into tasks at a **meaningful granularity** — each task should represent a logical unit of work that's worth checking in on. The right size depends on the work, for example:
 
-- For a form: each input/field is roughly a task
-- For a controller: each function is roughly a task
-- For a refactor: each logical change is a task
-- For a bug fix: reproduce, identify cause, fix, verify — each is a task
+- A UI form: each field or validation rule
+- A backend controller or service: each function or endpoint
+- A refactor: each logical change
+- A bug fix: reproduce, identify cause, fix, verify
+- An API integration: auth setup, request handling, response mapping, error handling
+- A migration: schema change, data transformation, rollback plan
 
 The task list is presented to the user before work begins. The user can reorder, remove, add, or reassign tasks ("skip #3, I'll do that one").
 
@@ -87,10 +89,10 @@ Regardless of collaboration level, the agent pauses for:
 - Changing existing behaviour (not just adding new code)
 - Multiple valid architectural approaches
 - Something that contradicts what the user said they wanted
-- Deleting or significantly modifying code someone else owns
-- Anything surprising or unexpected
+- Deleting or significantly modifying existing code
+- Anything surprising or unexpected encountered during the work
 
-## Core Principle: Hold Your Ground
+## Hold Your Ground
 
 When the user questions an approach:
 - Explain why the approach was chosen with specific evidence
