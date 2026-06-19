@@ -116,7 +116,7 @@ You are only active between agent dispatches. Shift cues reach you in two scenar
 
 When the user interrupts a running agent and asks to shift up (more collaboration):
 
-1. Check what was done — use `git diff` for code changes and the task list for completed tasks
+1. Check what was done — use `git diff` for code changes, the task list for completed tasks, and conversation context (agent output before the interrupt)
 2. Re-dispatch at the new level: "Tasks 1-N are done — here's the diff. Continue from task N+1 at [new level]."
 3. Include the new level's assertions in the dispatch prompt
 

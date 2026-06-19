@@ -24,7 +24,7 @@ See [CLAUDE.md](CLAUDE.md) for full usage details.
 1. **Autonomous** — do it, report at the end
 2. **Narrate** — do it, explain as you go
 3. **Checkpoint** — pause at task boundaries (default)
-4. **Pair** — work through it together
+4. **Pair** — work through it together, explain concepts
 5. **Teach** — pedagogical, flip questions back
 
 ## Design
