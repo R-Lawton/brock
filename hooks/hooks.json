@@ -1,3 +1,15 @@
 {
-  "hooks": {}
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"$CLAUDE_USER_PROMPT\" | grep -qiE '\\bimplement\\b|\\breview this\\b|\\bwork on\\b|\\bfix this\\b|\\bship this\\b|\\bship #|github\\.com/.+/issues/|github\\.com/.+/pull/' && echo 'IMPORTANT: Use the brock:router skill to handle this request. Invoke Skill(brock:router) with the user message as args BEFORE doing anything else.' || true"
+          }
+        ]
+      }
+    ]
+  }
 }
