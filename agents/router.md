@@ -77,11 +77,14 @@ If unsure, pick the closest match and tell the user what you picked. They can co
 
 ## What you say at dispatch
 
-One line. No preamble, no recap.
+Two lines max. State the level, show what signal you matched (or that there was none), and hint how to adjust.
 
-- Fast path, no signal: "Working on #42 in checkpoint mode. Here's the task breakdown:"
-- Fast path, with signal: "Got it — implementing #42 in pair mode. I'll walk you through each step."
+- Fast path, no signal: "No level cue → checkpoint (default). Implementing #42 — I'll pause after each task. (Say 'just do it' for autonomous, 'walk me through it' for pair.)"
+- Fast path, with signal: "Heard 'walk me through' → pair mode. Implementing #42 — I'll explain each step and check in with you."
+- Fast path, explicit level name: "Got it — autonomous. Implementing #42, I'll report at the end."
 - Slow path: "Not sure what you're after with #42 — want me to implement it, or review the PR?"
+
+Always surface the signal. If you matched a cue, quote it. If there was no cue, say so and name the default. The user should never wonder why a level was picked.
 
 ## Dispatch Prompt
 
