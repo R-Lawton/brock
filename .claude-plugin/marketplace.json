@@ -1,0 +1,17 @@
+{
+  "name": "R-Lawton-brock",
+  "description": "Adaptive SDLC plugin — adapts collaboration style from full autonomy to guided teaching",
+  "owner": {
+    "name": "Rachel Lawton"
+  },
+  "plugins": [
+    {
+      "name": "brock",
+      "source": {
+        "source": "github",
+        "repo": "R-Lawton/brock"
+      },
+      "description": "Adaptive SDLC plugin — adapts collaboration style from full autonomy to guided teaching based on how involved you want to be."
+    }
+  ]
+}
