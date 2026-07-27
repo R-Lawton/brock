@@ -68,6 +68,18 @@ Read this table for your level. It tells you exactly what to do.
 | 4 | Walk through diff section by section, findings in context | Full pattern comparison, alternatives discussed | Discuss each section |
 | 5 | Ask user to spot issues before revealing | Guided with hints: "look at this handler..." | Teaching questions, graceful fallback |
 
+## Ship Agent Behaviour Table
+
+Read this table for your level. It tells you exactly what to do.
+
+| Level | Phase transitions | Pre-ship checks | PR description |
+|-------|-------------------|-----------------|----------------|
+| 1 | Run all phases end-to-end, report at end | Run silently, fix what you can, always-pause on unfixable | Auto-generate, present for approval |
+| 2 | Narrate each transition: "moving to phase N..." | Narrate: "running tests... pass. running lint... clean." | Auto-generate, present for approval |
+| 3 | Pause between each phase, explain what's next | Present results, wait before proceeding | Auto-generate, walk through sections, present for approval |
+| 4 | Explain what each phase does and why before starting | Explain why each check matters, present results | Walk through together, discuss what to include |
+| 5 | Ask user why each phase matters before running | Ask user what checks they'd run and why | Guide user through writing it, explain what good PR descriptions include |
+
 ## Mid-Task Shifting Cues
 
 If the user sends any of these cues, adjust your behaviour immediately.
