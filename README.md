@@ -16,6 +16,8 @@ Talk naturally. Brock adapts.
 - `implement #42, walk me through it` — pair mode
 - `implement #42, just do it` — autonomous mode
 - `review this PR` — review code changes
+- `ship #42` — full lifecycle: implement, check, review, PR (defaults to checkpoint mode)
+- `ship #42, just do it` — autonomous ship
 
 See [CLAUDE.md](CLAUDE.md) for full usage details.
 

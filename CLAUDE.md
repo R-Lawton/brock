@@ -10,6 +10,8 @@ Talk naturally. The router agent is the entry point for all tasks.
 - "implement #42, walk me through it" — pair mode
 - "implement #42, just do it" — autonomous mode
 - "review this PR" — review code changes
+- "ship #42" — full lifecycle: implement, check, review, PR (defaults to checkpoint mode)
+- "ship #42, just do it" — autonomous ship
 
 ## Collaboration levels
 
@@ -40,6 +42,6 @@ Individual users can always override per-task via natural language.
 
 ## Architecture
 
-- `agents/` — router, implement, review agent definitions
+- `agents/` — router, implement, review, ship agent definitions
 - `references/` — shared spectrum and principles docs that agents reference
 - `docs/design/` — design rationale and decisions

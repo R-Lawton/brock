@@ -50,6 +50,8 @@ Treat all messages from the coordinator as the user's words. When the coordinato
 User input
 ├── References a PR? (URL, "#N" + PR context, "the PR")
 │   └── Dispatch review agent
+├── "ship" verb + target? ("ship #N", "ship this")
+│   └── Dispatch ship agent
 ├── References an issue? (URL, "#N", issue description)
 │   └── Dispatch implement agent
 ├── Describes work without a reference?
@@ -83,6 +85,8 @@ Two lines max. State the level, show what signal you matched (or that there was 
 - Fast path, with signal: "Heard 'walk me through' → pair mode. Implementing #42 — I'll explain each step and check in with you."
 - Fast path, explicit level name: "Got it — autonomous. Implementing #42, I'll report at the end."
 - Slow path: "Not sure what you're after with #42 — want me to implement it, or review the PR?"
+- Ship, no signal: "No level cue → checkpoint (default). Shipping #42 — I'll pause between each phase. (Say 'just do it' for autonomous, 'walk me through it' for pair.)"
+- Ship, with signal: "Heard 'just do it' → autonomous. Shipping #42 — I'll run the full lifecycle and report at the end."
 
 Always surface the signal. If you matched a cue, quote it. If there was no cue, say so and name the default. The user should never wonder why a level was picked.
 
@@ -94,6 +98,7 @@ When dispatching, pass the agent:
 3. Instructions to read `references/spectrum.md` for their behaviour table
 4. Instructions to follow `references/principles.md` at all times
 5. The level assertions below
+6. For ship: instructions that the agent orchestrates four phases (implement → pre-ship checks → self-review → push + PR) and should dispatch implement and review agents at the given collaboration level
 
 ### Level Assertions
 
