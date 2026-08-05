@@ -49,7 +49,12 @@ Treat all messages from the coordinator as the user's words. When the coordinato
 ```
 User input
 ├── References a PR? (URL, "#N" + PR context, "the PR")
-│   └── Dispatch review agent
+│   ├── Readiness cue? ("ready for review", "ready check", "pre-review", "before I send")
+│   │   └── Dispatch review agent with focus: readiness
+│   └── No readiness cue
+│       └── Dispatch review agent with focus: correctness
+├── Readiness cue without PR reference? ("is this ready?", "ready check")
+│   └── Dispatch review agent with focus: readiness (review local changes)
 ├── "ship" verb + target? ("ship #N", "ship this")
 │   └── Dispatch ship agent
 ├── References an issue? (URL, "#N", issue description)
@@ -87,6 +92,8 @@ Two lines max. State the level, show what signal you matched (or that there was 
 - Slow path: "Not sure what you're after with #42 — want me to implement it, or review the PR?"
 - Ship, no signal: "No level cue → checkpoint (default). Shipping #42 — I'll pause between each phase. (Say 'just do it' for autonomous, 'walk me through it' for pair.)"
 - Ship, with signal: "Heard 'just do it' → autonomous. Shipping #42 — I'll run the full lifecycle and report at the end."
+- Readiness review, no signal: "No level cue → checkpoint (default). Running readiness check — I'll run pre-ship checks, scan for cleanliness, then do a full review. I'll pause between each step."
+- Readiness review, with signal: "Heard 'just do it' → autonomous. Running full readiness check, I'll report at the end."
 
 Always surface the signal. If you matched a cue, quote it. If there was no cue, say so and name the default. The user should never wonder why a level was picked.
 
@@ -99,6 +106,7 @@ When dispatching, pass the agent:
 4. Instructions to follow `references/principles.md` at all times
 5. The level assertions below
 6. For ship: instructions that the agent orchestrates four phases (implement → pre-ship checks → self-review → push + PR) and should dispatch implement and review agents at the given collaboration level
+7. For review with readiness focus: include "Review focus: readiness. Run the full Readiness Review checklist from `references/review-guide.md`." in the dispatch prompt
 
 ### Level Assertions
 

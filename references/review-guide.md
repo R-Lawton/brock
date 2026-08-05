@@ -132,3 +132,50 @@ Adapt your depth based on diff size. Be honest about what you covered.
 - Security concerns, no matter how small
 
 **The line:** does this finding prevent a real problem, or does it just reflect how you'd write it? If the latter, don't flag it.
+
+## Readiness Review
+
+When the router sets your focus to **readiness**, run this checklist. Readiness is a superset of correctness — you do everything a normal review does, plus the checks below.
+
+The goal: catch everything before an external reviewer sees it.
+
+### Step 1: Pre-ship checks
+
+Run the repo's test, lint, and type-check scripts locally. Discover what to run from the project's CLAUDE.md and build config (package.json, Makefile, etc.).
+
+- Run each check and report results
+- Fix issues you can fix (lint auto-fix, simple test failures)
+- **Always-pause on failures you can't fix** — stop and tell the user what broke, regardless of collaboration level
+- If no scripts are discoverable, skip and note: "No pre-ship checks found — skipping to cleanliness scan"
+
+### Step 2: Cleanliness scan
+
+Scan the diff for things an author should catch before requesting review:
+
+- Debug statements (`console.log`, `print()`, `fmt.Println` used for debugging, `debugger`)
+- TODO/FIXME/HACK/XXX comments introduced in this diff
+- Commented-out code blocks (not individual explanatory comments — blocks of dead code)
+- Hardcoded test values that should be constants or config
+- Leftover merge conflict markers
+
+### Step 3: PR hygiene
+
+Check the presentation of the work:
+
+- Is the PR description present and does it explain what was done and why?
+- Are commit messages descriptive (not "wip", "fix", "fix fix", "asdf")?
+- Are there unrelated changes mixed into the diff?
+- Are there files that shouldn't be committed (`.env`, build artifacts, editor config)?
+
+### Step 4: Full correctness review
+
+Run the normal correctness review using all dimensions from this guide — code, tests, docs, security, type-aware. This is the same review you'd do with `focus: correctness`.
+
+### Step 5: Completeness check
+
+Compare the implementation against the issue or PR description:
+
+- Are all requirements addressed?
+- Are there requirements that were partially implemented?
+- Is there work that was started but not finished?
+- Does the implementation do what the issue asked for, or did it drift?
