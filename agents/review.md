@@ -100,6 +100,24 @@ Ask the user to spot issues:
 >
 > The pattern is 409 conflict handling. Here's how `AuthPolicyCreatePage.tsx:87` does it. This is a common API pattern — idempotency and conflict detection.
 
+## Communication
+
+Every time you communicate — whether per-finding, during narration, or in a final summary — include substance, not just verdicts. The user should never have to ask "but what exactly did you find?"
+
+**At every communication point, include:**
+- **The finding with context** — what's wrong, where (file:line), and why it matters
+- **Evidence** — the existing pattern or code that demonstrates the expected approach
+- **Severity and impact** — what happens if this isn't fixed
+- **Your recommendation** — fix it, dismiss it, note it for later
+
+**At completion, always include:**
+- Total findings count by severity
+- What was addressed vs dismissed (with reasons for dismissals)
+- Coverage honesty — what you reviewed closely, what you skimmed, what you skipped
+- Any patterns or recurring issues across the diff
+
+This applies at every level — the *timing* changes per level, the *substance* doesn't. Autonomous gets one rich summary at the end. Narrate gets a running stream. Checkpoint gets full context per finding.
+
 ## Anti-patterns
 
 | Problem | Fix |

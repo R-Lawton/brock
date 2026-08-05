@@ -74,21 +74,29 @@ The spectrum applies to transitions between phases, not just within them.
 
 ### Level 1 — Autonomous
 
-Run all four phases end-to-end. Report at the end:
+Run all four phases end-to-end. Report at the end with full detail:
 
-> Done. Implemented #42 — added validation to the create form. Pre-ship checks passed (tests, lint, type check). Self-review caught 2 issues (null check, missing error handler) and fixed both. Here's the draft PR description for your approval.
+> Done. Shipped #42 — here's what happened across all four phases:
+>
+> **Implementation:** Added validation to the create form. 4 tasks completed — name validation, email validation, error messages (AlertGroup pattern from `CreatePage.tsx:91`), submit button disable. All changes in `CreateForm.tsx`.
+>
+> **Pre-ship checks:** Tests pass (24/24), lint clean, type check clean.
+>
+> **Self-review:** Found 2 issues, fixed both — null check on `handleSubmit` response (`CreateForm.tsx:67`), missing 409 conflict handler (`CreateForm.tsx:72`, pattern from `AuthPolicyCreatePage.tsx:87`).
+>
+> **PR:** Draft PR ready. Here's the description for your approval.
 
 ### Level 2 — Narrate
 
-Run the lifecycle, narrating each phase transition:
+Run the lifecycle, narrating each phase transition with substance:
 
-> Starting phase 1 — dispatching implement agent...
+> Starting phase 1 — dispatching implement agent for #42...
 >
-> Implementation complete. Moving to phase 2 — running pre-ship checks...
+> Implementation complete. 4 tasks done — validation added to `CreateForm.tsx` using the shared validator pattern from `utils/validation.ts`. Error messages follow the `AlertGroup` approach from `CreatePage.tsx:91`. Moving to phase 2 — running pre-ship checks...
 >
-> Tests pass, lint clean. Moving to phase 3 — self-review...
+> Pre-ship checks done. Tests: 24/24 pass. Lint: clean. Type check: clean. Moving to phase 3 — self-review...
 >
-> Self-review found 1 issue, fixed it. Moving to phase 4 — here's the PR description for your approval.
+> Self-review found 1 issue — missing null check on API response in `CreateForm.tsx:67`. Fixed it. Moving to phase 4 — here's the PR description for your approval.
 
 ### Level 3 — Checkpoint
 
@@ -148,6 +156,25 @@ Format:
 
 Closes #N
 ```
+
+## Communication
+
+Every time you communicate — whether between phases, during narration, or in a final summary — include substance, not just phase transitions. The user should never have to ask "but what happened in that phase?"
+
+**At every phase transition, include:**
+- **What the phase produced** — files changed, tests run, findings found
+- **Key outcomes** — what passed, what failed, what was fixed
+- **Decisions made** — anything where you or a dispatched agent chose between alternatives
+- **What's next** — which phase is coming and what it will do
+
+**At completion, always include:**
+- Summary of what was implemented (files, approach, patterns followed)
+- Pre-ship check results (which checks ran, pass/fail)
+- Self-review summary (findings count, what was fixed, what was dismissed)
+- The PR description for approval
+- Anything that needs the user's attention
+
+This applies at every level — the *timing* changes per level, the *substance* doesn't. Autonomous gets one rich report at the end. Narrate gets phase-by-phase detail. Checkpoint gets a substantial check-in between each phase.
 
 ## Anti-patterns
 
