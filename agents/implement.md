@@ -40,29 +40,38 @@ These show what one task cycle looks like at each level. Match this tone and for
 
 ### Level 1 — Autonomous
 
-Execute all tasks. Report at the end:
+Execute all tasks. Report at the end with full detail:
 
-> Done. Added validation to the create form — name (required, max 64), email (format check), error messages following the AlertGroup pattern from `CreatePage.tsx:91`. 4 tasks completed, tests pass.
+> Done. 4 tasks completed, tests pass.
+>
+> **What changed:**
+> - `CreateForm.tsx` — added name validation (required, max 64 chars) and email validation (format check) using `validateRequired()` and `validateEmail()` from `utils/validation.ts`
+> - `CreateForm.tsx` — added error messages following the `AlertGroup` pattern from `CreatePage.tsx:91`
+> - `CreateForm.tsx` — disabled submit button until form is valid, same approach as `AuthPolicyCreatePage.tsx:103`
+>
+> **Decisions:** Used the shared validator pattern rather than inline validation — every other form in the repo does it this way. Chose `AlertGroup` over inline field errors because that's the established pattern here.
+>
+> **Tests:** All existing tests pass. No new tests added — the validation utils are already tested in `utils/validation.test.ts`.
 
 ### Level 2 — Narrate
 
-Explain as you go, don't pause:
+Explain as you go with substance, don't pause:
 
 > Starting task 2/5 — email validation. The other forms use `validateEmail()` from `utils/validation.ts`, I'll follow the same pattern...
 >
 > [implements]
 >
-> Done. Used the same approach as `AuthPolicyCreatePage.tsx:52`. Moving to task 3...
+> Done — added `validateEmail()` to `CreateForm.tsx:47`. Imported from `utils/validation.ts`, same approach as `AuthPolicyCreatePage.tsx:52`. The validator checks format using the same regex the other forms use. Moving to task 3 — adding error messages...
 
 ### Level 3 — Checkpoint
 
-Pause after each task:
+Pause after each task with full context:
 
 > Task 2/5: Add email validation. The other forms use `validateEmail()` from `utils/validation.ts` — I'll follow the same pattern.
 >
 > [implements]
 >
-> Done — added email validation matching the pattern in `AuthPolicyCreatePage.tsx:52`. Ready for the next task?
+> Done — added email validation to `CreateForm.tsx:47`, matching the pattern in `AuthPolicyCreatePage.tsx:52`. Used the shared `validateEmail()` utility rather than inline validation. The field now shows an error state on invalid format, same as the other forms. Ready for the next task?
 >
 > [waits for user]
 
@@ -89,6 +98,24 @@ Ask the user to reason, then explain:
 > [user answers or says "I don't know"]
 >
 > Right — `validateEmail()`. It's the same one in `AuthPolicyCreatePage.tsx:52`. The pattern in this repo is shared validation utilities, not inline logic. One place to update if rules change. This is called the shared validator pattern — keeps validation logic DRY across forms.
+
+## Communication
+
+Every time you communicate — whether after a task, during narration, or in a final summary — include substance, not just status. The user should never have to ask "but what did you actually do?"
+
+**At every communication point, include:**
+- **What changed** — files modified or created, with paths
+- **Why this approach** — cite the pattern you followed (file:line) or explain the departure
+- **Decisions made** — anything where you chose between alternatives
+- **What's next** — what you're about to do (or what's left)
+
+**At completion, always include:**
+- Summary of all files changed and what each change does
+- Key decisions and the reasoning behind them
+- Anything that needs the user's attention (edge cases, trade-offs, things you weren't sure about)
+- Test results if you ran any
+
+This applies at every level — the *timing* changes per level, the *substance* doesn't. Autonomous gets one rich report at the end. Narrate gets a stream of detail. Checkpoint gets a substantial check-in at each pause.
 
 ## Anti-patterns
 
