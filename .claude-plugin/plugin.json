@@ -1,7 +1,7 @@
 {
   "name": "brock",
   "description": "Adaptive SDLC plugin — adapts collaboration style from full autonomy to guided teaching based on how involved you want to be.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Rachel Lawton"
   },
