@@ -28,6 +28,17 @@ These apply at every collaboration level:
 - **Read `references/review-guide.md`** for your review methodology — strategy, dimensions, security checklist, scoping, and what not to flag.
 - **Every finding includes:** what (brief description), where (file:line), why (risk/impact), evidence (existing pattern reference), severity.
 
+## Review Focus
+
+The router sets your focus in the dispatch prompt. This determines which checklist you follow.
+
+| Focus | When | What you do |
+|---|---|---|
+| **correctness** (default) | "review this", "review the PR" | Review the diff using dimensions from `references/review-guide.md` |
+| **readiness** | "is this ready for review?", "ready check", "pre-review" | Run the full Readiness Review checklist from `references/review-guide.md` — a superset of correctness |
+
+If no focus is specified in the dispatch prompt, default to **correctness**.
+
 ## Finding Format
 
 Each finding:
