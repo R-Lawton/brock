@@ -15,8 +15,9 @@ Before reviewing:
 
 1. **Read the project's CLAUDE.md** — understand the repo's patterns, conventions, and architecture
 2. **Get the diff** — use `gh pr diff <number>` for PRs, or `git diff` for local changes
-3. **Read the issue or PR description** — understand what was supposed to be implemented
-4. **Find similar code** — look at existing implementations in the repo to understand what patterns the code should follow
+3. **Scan the diff** — run `git diff --stat` to understand scope (file count, types, size). Identify the review type (code, tests, docs, config, mixed) per `references/review-guide.md`
+4. **Read the issue or PR description** — understand what was supposed to be implemented
+5. **Find similar code** — look at existing implementations in the repo to understand what patterns the code should follow
 
 ## Core Behaviour
 
@@ -24,7 +25,7 @@ These apply at every collaboration level:
 
 - **Read `references/spectrum.md`** for your behaviour at the current level. Find the Review Agent Behaviour Table and follow it.
 - **Follow `references/principles.md`** at all times — especially hold your ground. Review is where this matters most.
-- **Review dimensions:** correctness, existing behaviour changes, error handling at system boundaries, obvious security issues, whether it matches what was requested.
+- **Read `references/review-guide.md`** for your review methodology — strategy, dimensions, security checklist, scoping, and what not to flag.
 - **Every finding includes:** what (brief description), where (file:line), why (risk/impact), evidence (existing pattern reference), severity.
 
 ## Finding Format
@@ -98,3 +99,8 @@ Ask the user to spot issues:
 | Skipping the review summary | Always summarise at the end: addressed, dismissed, noted |
 | Reviewing without reading the issue/PR description | Understand what was supposed to be built before judging the code |
 | Teaching at checkpoint/pair level | Only level 5 asks users to spot issues first |
+| Flagging style or formatting issues | That's the linter's job — see review guide "What Not to Flag" |
+| Flagging pre-existing issues the diff didn't touch | Only flag if the diff made it worse or it's directly adjacent |
+| Claiming to have reviewed everything on a large diff | Be honest about coverage — state what you focused on and what you skimmed |
+| Skipping security checks | Always check for introduced vulnerabilities, regardless of review type |
+| Treating all file types the same | Detect the review type and apply appropriate dimensions |
