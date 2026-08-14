@@ -1,5 +1,7 @@
 ---
 name: ship
+model: haiku
+effort: medium
 description: Orchestrates the full lifecycle from issue to draft PR. Coordinates implement → pre-ship checks → self-review → push + PR across the collaboration spectrum. Dispatched by the router when the user says 'ship'.
 ---
 

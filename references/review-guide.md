@@ -16,7 +16,48 @@ Run `git diff --stat` (or `gh pr diff --stat`) to understand scope. How many fil
 
 Read the issue or PR description. Understand what the change is *supposed* to do. Every finding is relative to intent — "this doesn't handle errors" is only a finding if error handling is relevant to what was requested.
 
-### 3. Review
+### 3. Functional Accuracy
+
+Before checking code quality, verify the implementation is accurate. Which checks apply depends on the review type detected in step 2. Not every dimension applies to every review — scope to what's relevant.
+
+**Requirements coverage** (all review types):
+- Read the issue or PR description requirements line by line
+- For each requirement, find the corresponding change — code, doc section, config entry, test case
+- Flag gaps: requirements with no corresponding change, or changes that only partially address a requirement
+- Flag drift: changes that do something different from what was asked, even if they're clean
+- Flag silent omissions: requirements the author may have skipped without noting why
+
+**Runtime correctness** (code, config):
+- Will this code actually execute? Trace the critical paths mentally — entry point to exit
+- Missing imports, undefined references, wrong function signatures that will fail at runtime
+- Type mismatches that compile but crash (e.g., passing wrong shape of data, missing required fields)
+- Uninitialised variables, null/undefined access on paths that will actually be hit
+- API calls with wrong parameters, missing auth, or incorrect request/response shapes
+- Resource leaks — opened connections, listeners, or subscriptions that never get cleaned up
+- For config: valid syntax, correct field names, values that the consuming code actually expects
+
+**Regression risk** (code, config, tests):
+- Does the change modify behaviour that existing code depends on?
+- Are there callers of changed functions that now receive different return values or side effects?
+- Could this break existing tests? (Don't just check if tests pass — consider if the change invalidates what tests were verifying)
+- Are there implicit contracts (event ordering, data format, timing) that this change violates?
+- For config: will existing deployments or environments break with these changes?
+
+**Accuracy for docs:**
+- Do code examples actually work against the current codebase?
+- Are referenced functions, flags, and endpoints real and current?
+- Do instructions produce the described outcome if followed step by step?
+
+**Accuracy for tests:**
+- Do the tests actually test what they claim to? (not just "no error" assertions)
+- Would the test still pass if the feature was broken? (false pass detection)
+- Do test inputs and expected outputs match real behaviour?
+
+If any relevant dimensions have issues, the review cannot approve — regardless of how clean the change looks.
+
+Present functional accuracy findings before code quality findings. A requirement gap or runtime issue is always higher severity than a style or pattern concern.
+
+### 4. Code Quality Review
 
 Work through the diff:
 - **Small diffs (1-5 files, < ~200 lines):** file-by-file, review every line. Check surrounding code for pattern consistency.
@@ -169,13 +210,13 @@ Check the presentation of the work:
 
 ### Step 4: Full correctness review
 
-Run the normal correctness review using all dimensions from this guide — code, tests, docs, security, type-aware. This is the same review you'd do with `focus: correctness`.
+Run the normal correctness review using all passes from this guide — functional accuracy (pass 3), then code quality (pass 4), including all dimensions: code, tests, docs, security, type-aware.
 
 ### Step 5: Completeness check
 
-Compare the implementation against the issue or PR description:
+Compare the implementation against the issue or PR description (builds on the functional accuracy pass with a broader lens):
 
-- Are all requirements addressed?
+- Are all requirements addressed? (functional accuracy should have caught gaps — this is a second look)
 - Are there requirements that were partially implemented?
 - Is there work that was started but not finished?
 - Does the implementation do what the issue asked for, or did it drift?

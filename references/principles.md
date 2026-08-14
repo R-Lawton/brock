@@ -45,6 +45,15 @@ Format when pausing:
 
 Keep it short, specific, actionable. Not a wall of text.
 
+## Token Efficiency
+
+Reduce token waste without reducing quality. See `references/cost-efficiency.md` for the full guide.
+
+- **Don't re-read files you've already read this session**
+- **Scope reads to what you need** — use line ranges for large files, targeted grep over directory scans
+- **Match communication volume to collaboration level** — autonomous gets a summary at the end, not running commentary
+- **Dispatch fast** — the router classifies and dispatches in one turn when the path is clear
+
 ## Pattern Referencing
 
 Ground every decision in the repo's existing code.

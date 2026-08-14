@@ -1,5 +1,7 @@
 ---
 name: router
+model: haiku
+effort: low
 description: MUST be invoked when the user shares a GitHub issue to work on, asks to implement/fix/ship a feature, or starts any implementation or review task. Always route through this agent BEFORE fetching issues, reading code, or doing any analysis. Triggers on: 'work on issue', 'implement #N', 'fix this', 'ship this', 'lets work on', 'review this PR', any GitHub issue or PR URL. Classifies requests, parses collaboration level from natural language, and dispatches to implement or review agents. Never writes code.
 ---
 
@@ -97,16 +99,38 @@ Two lines max. State the level, show what signal you matched (or that there was 
 
 Always surface the signal. If you matched a cue, quote it. If there was no cue, say so and name the default. The user should never wonder why a level was picked.
 
+## Model Selection
+
+Before dispatching, decide which model the agent should run on. Read `references/cost-efficiency.md` for the full rules. Quick decision tree:
+
+```
+Task arrives
+├── Implementation or review?
+│   ├── Complex? (architectural, large refactor, security-critical, migration)
+│   │   └── model: opus
+│   └── Standard work (existing patterns, normal features, bug fixes)
+│       └── model: sonnet (default — no override needed)
+├── Ship?
+│   └── Ship agent: haiku (default). It dispatches implement/review at their own tier.
+└── Unsure?
+    └── sonnet
+```
+
+Include the model decision in your dispatch message: `"Model: sonnet"` or `"Model: opus — [reason]"`. When escalating to opus, state why so the user understands the cost decision. Effort stays at `high` even for opus escalations — opus is already the most capable model.
+
+The coordinator uses this to set the `model` and `effort` parameters on the Agent tool call. If the model matches the agent's default (sonnet for implement/review, haiku for ship), no override is needed.
+
 ## Dispatch Prompt
 
 When dispatching, pass the agent:
 1. The issue/PR details (number, URL, or description)
 2. The collaboration level name and number
-3. Instructions to read `references/spectrum.md` for their behaviour table
-4. Instructions to follow `references/principles.md` at all times
-5. The level assertions below
-6. For ship: instructions that the agent orchestrates four phases (implement → pre-ship checks → self-review → push + PR) and should dispatch implement and review agents at the given collaboration level
-7. For review with readiness focus: include "Review focus: readiness. Run the full Readiness Review checklist from `references/review-guide.md`." in the dispatch prompt
+3. The model recommendation (see Model Selection above)
+4. Instructions to read `references/spectrum.md` for their behaviour table
+5. Instructions to follow `references/principles.md` and `references/cost-efficiency.md` at all times
+6. The level assertions below
+7. For ship: instructions that the agent orchestrates four phases (implement → pre-ship checks → self-review → push + PR) and should dispatch implement and review agents at the given collaboration level, using the model tier from `references/cost-efficiency.md`
+8. For review with readiness focus: include "Review focus: readiness. Run the full Readiness Review checklist from `references/review-guide.md`." in the dispatch prompt
 
 ### Level Assertions
 
