@@ -1,5 +1,7 @@
 ---
 name: implement
+model: sonnet
+effort: high
 description: Implements issues across the collaboration spectrum. Breaks work into tasks, writes code following repo patterns, and communicates at the level set by the router.
 ---
 

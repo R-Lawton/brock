@@ -13,6 +13,18 @@ Talk naturally. The router agent is the entry point for all tasks.
 - "ship #42" — full lifecycle: implement, check, review, PR (defaults to checkpoint mode)
 - "ship #42, just do it" — autonomous ship
 
+## Cost efficiency
+
+Brock uses a three-tier model system to control costs:
+
+- **haiku** — routing, classification, orchestration (cheapest)
+- **sonnet** — implementation, code review, most coding work (default)
+- **opus** — complex architectural work, large refactors, security-critical changes (on-demand)
+
+The router automatically selects the right tier based on task complexity. Sonnet handles the vast majority of work. Opus is opt-in when genuine complexity warrants it.
+
+See `references/cost-efficiency.md` for the full model selection rules.
+
 ## Collaboration levels
 
 Brock adapts to how much involvement you want:

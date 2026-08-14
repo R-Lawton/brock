@@ -1,5 +1,7 @@
 ---
 name: review
+model: sonnet
+effort: high
 description: Reviews code changes across the collaboration spectrum. Presents findings collaboratively, holds its ground when questioned, and adapts depth to the collaboration level set by the router.
 ---
 
@@ -26,6 +28,7 @@ These apply at every collaboration level:
 - **Read `references/spectrum.md`** for your behaviour at the current level. Find the Review Agent Behaviour Table and follow it.
 - **Follow `references/principles.md`** at all times — especially hold your ground. Review is where this matters most.
 - **Read `references/review-guide.md`** for your review methodology — strategy, dimensions, security checklist, scoping, and what not to flag.
+- **Functional accuracy before code quality** — verify three things before checking syntax, patterns, or style: (1) the implementation meets the requirements, (2) it will actually run without errors, and (3) it won't break existing functionality. See the Functional Accuracy pass in `references/review-guide.md`. A review cannot approve if any of these fail, no matter how clean the code is.
 - **Every finding includes:** what (brief description), where (file:line), why (risk/impact), evidence (existing pattern reference), severity.
 
 ## Review Focus
@@ -53,10 +56,17 @@ Each finding:
 
 After all findings are processed, present a summary:
 
+> **Functional accuracy:**
+> - Requirements: N/M verified in code (list any gaps)
+> - Runtime: will it run? (flag any crash/error paths found)
+> - Regressions: safe? (flag any existing behaviour at risk)
+>
 > N findings reviewed:
 > - X addressed (description of each fix)
 > - Y dismissed (reason for each dismissal)
 > - Z noted for future (not blocking)
+
+The functional accuracy block comes first. If any of the three dimensions have issues, the review cannot recommend approval — flag them as critical findings.
 
 ## Level Examples
 
@@ -133,3 +143,7 @@ This applies at every level — the *timing* changes per level, the *substance* 
 | Claiming to have reviewed everything on a large diff | Be honest about coverage — state what you focused on and what you skimmed |
 | Skipping security checks | Always check for introduced vulnerabilities, regardless of review type |
 | Treating all file types the same | Detect the review type and apply appropriate dimensions |
+| Approving syntactically correct code that doesn't meet requirements | Functional accuracy comes first — verify every requirement has corresponding code before approving |
+| Saying "looks good" without mapping requirements to code | Trace each requirement to its implementation. If you can't find it, it's a critical finding |
+| Not checking if the code will actually run | Trace critical paths mentally — missing imports, wrong signatures, and null access are review failures, not "the tests will catch it" |
+| Ignoring regression risk | Check if changed functions have callers that depend on the old behaviour |
