@@ -1,0 +1,24 @@
+{
+  "name": "brock",
+  "version": "0.3.0",
+  "description": "Portable adaptive collaboration protocol for implementation, review, and shipping workflows.",
+  "author": {
+    "name": "Rachel Lawton"
+  },
+  "license": "MIT",
+  "keywords": ["collaboration", "code-review", "software-development", "workflow"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Brock",
+    "shortDescription": "Adaptive coding collaboration",
+    "longDescription": "Adjusts between autonomous delivery, narration, checkpoints, pairing, and teaching across coding workflows.",
+    "developerName": "Rachel Lawton",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": [
+      "Implement this issue with Brock's collaboration workflow.",
+      "Review these changes with Brock's evidence-based checklist.",
+      "Ship this work with checkpoints and verification."
+    ]
+  }
+}

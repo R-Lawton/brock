@@ -5,11 +5,33 @@ description: MUST be invoked when the user asks to implement, fix, ship, or work
 
 # Brock Router
 
-Route this request through the brock router agent. Do not implement, review, read code, or do any analysis yourself.
+Route this request through Brock's shared router. The router classifies and dispatches;
+it does not perform the implementation or review itself.
+
+## Shared routing contract
+
+1. Treat the user's complete message as the routing input. Do not require a host-
+   specific prompt variable or rewrite the request before routing it.
+2. Read and apply the classification and collaboration-level rules in
+   [`BROCK.md`](../../BROCK.md).
+3. Select the matching specialist guidance from `agents/`: implement, review, or ship.
+   Preserve the parsed level and its assertions when handing off the work.
+4. If the host provides delegation, invoke the matching specialist through the host's
+   native mechanism. Pass the complete user request, classification, collaboration
+   level, and required specialist references; the invocation syntax is host-defined.
+5. If the host does not provide delegation, continue in the current conversation with
+   the selected specialist guidance. Keep routing and specialist work logically
+   separate, and never imply that an external specialist ran.
+
+The router must be usable on every supported host. It must not depend on a particular
+delegation command, agent parameter, environment variable, prompt format, or lifecycle
+hook.
 
 ## Steps
 
-1. Dispatch an agent with `subagent_type: "brock:router"`
-2. Pass the user's full message as the prompt — do not summarise or rewrite it
-3. The router parses the collaboration level from natural language and dispatches the right specialist
-4. Relay the router's output back to the user exactly as received
+1. Apply the shared routing contract above.
+2. Pass the user's full message through unchanged when handing off or continuing inline.
+3. Parse the collaboration level from natural language and preserve it for the selected
+   specialist.
+4. Return the routing result through the host's normal conversation path, accurately
+   reflecting whether native delegation occurred or the work continued inline.

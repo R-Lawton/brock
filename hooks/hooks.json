@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"$CLAUDE_USER_PROMPT\" | grep -qiE '\\bimplement\\b|\\breview this\\b|\\bwork on\\b|\\bfix this\\b|\\bship\\b|github\\.com/.+/issues/|github\\.com/.+/pull/' && echo 'IMPORTANT: Use the brock:router skill to handle this request. Invoke Skill(brock:router) with the user message as args BEFORE doing anything else.' || true"
+            "command": "prompt=$(jq -r '.prompt // empty' 2>/dev/null) || exit 0; printf '%s' \"$prompt\" | grep -qiE '(^|[^[:alnum:]_])(implement|implementation|review|ship|fix|work on|issue|pull request|pr)([^[:alnum:]_]|$)|github\\.com/[^[:space:]]+/(issues|pull)/' && printf '%s\\n' 'Brock: route this request through the shared router.' || true"
           }
         ]
       }

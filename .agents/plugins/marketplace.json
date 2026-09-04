@@ -1,0 +1,20 @@
+{
+  "name": "brock-codex",
+  "interface": {
+    "displayName": "Brock Codex"
+  },
+  "plugins": [
+    {
+      "name": "brock",
+      "source": {
+        "source": "local",
+        "path": "./plugins/brock"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
